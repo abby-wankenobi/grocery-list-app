@@ -78,7 +78,7 @@ const ListContainer: React.FC = () => {
     const saveNewItem = ( newName: string, newPrice: number ) => {
         // If fields are empty, show error message
         if ( !newName || !newPrice ) setError( 'Fields must not be empty' );
-        // Else add item to grocery list, remove input fields and remove any errors
+        // Else round number to nearly whole dollar add item to grocery list, remove input fields and remove any errors
         else {
             setGroceryList( [ ...groceryList, { name: newName, price: Math.round( newPrice ) } ] );
             setNewItem( false );
