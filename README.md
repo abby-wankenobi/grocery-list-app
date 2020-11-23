@@ -1,6 +1,6 @@
-# Getting Started with Create React App
+# Grocery List App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This app lets you add grocery items and their prices to your list, remove them, see your total and know when you are over budget. Built with React/TypeScript and uses styled components. 
 
 ## Available Scripts
 
