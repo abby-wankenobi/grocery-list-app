@@ -47,26 +47,38 @@ const ListOuterContainer = styled.div`
         font-weight: bold;
         cursor: pointer;
     }
-`;
 
-interface ListProps {
-    name: string;
-    price: number;
-}
+    .total {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .over-budget {
+            color: #ac2c1c;
+            font-weight: bold;
+        }
+    }
+`;
 
 const ListContainer: React.FC = () => {
     
-    const [ groceryList, setGroceryList ] = useState([ { name: 'test', price: 3 } ] );
+    const [ groceryList, setGroceryList ] = useState<GroceryListItem[]>([]);
     const [ newItem, setNewItem ] = useState( false );
-    const [ totalPrice, setTotalPrice ] = useState( 0 );
     const [ error, setError ] = useState( '' );
     
     const totalCost = () => {
-        return groceryList.reduce( ( total, current ) => total + current.price, 0 );
+        // add list item costs, or return 0 if no items exist
+        if ( groceryList.length ) {
+            return groceryList.reduce( ( total, current ) => total + current.price, 0 );
+        } else {
+            return 0;
+        }
     }
     
     const saveNewItem = ( newName: string, newPrice: number ) => {
+        // If fields are empty, show error message
         if ( !newName || !newPrice ) setError( 'Fields must not be empty' );
+        // Else add item to grocery list, remove input fields and remove any errors
         else {
             setGroceryList( [ ...groceryList, { name: newName, price: Math.round( newPrice ) } ] );
             setNewItem( false );
@@ -74,10 +86,8 @@ const ListContainer: React.FC = () => {
         }
     }
     
-    const deleteFromList = ( itemToRemove: ListProps ) => {
-        setGroceryList(
-            groceryList.filter( item =>  item !== itemToRemove )
-        );
+    const deleteFromList = ( itemToRemove: GroceryListItem ) => {
+        setGroceryList( groceryList.filter( item =>  item !== itemToRemove ) );
     }
     
     return (
@@ -88,19 +98,15 @@ const ListContainer: React.FC = () => {
                     <span>Item</span>
                     <span>Price</span>
                 </div>
-                :
-                ''
+                : ''
             }
             { groceryList.length ? 
                 groceryList.map( ( item, i ) => {
                     return <ListItem key={ 'item-' + i } 
-                                     item={ item }  
-                                     name={ item.name } 
-                                     price={ item.price }
+                                     item={ item }
                                      deleteItem={ deleteFromList } />
                 })
-                :
-                <p>No items on your list</p>
+                : <p>No items on your list</p>
             }
             { newItem ? 
                 <NewItem save={ saveNewItem } error={ error } />
@@ -108,8 +114,10 @@ const ListContainer: React.FC = () => {
                 <div className="placeholder"></div>
             }
             <button onClick={ () => setNewItem( true ) }>Add new item</button>
-            <p>Total: ${ totalCost() }</p>
-            { totalCost() > 30 && <p>Over budget!</p>}
+            <div className="total">
+                <p>Total: ${ totalCost() }</p>
+                { totalCost() > 30 && <p className="over-budget">Over budget!</p> }
+            </div>
         </ListOuterContainer>
     )
 }
