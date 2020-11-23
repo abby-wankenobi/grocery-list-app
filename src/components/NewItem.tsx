@@ -35,7 +35,7 @@ const NewItem: React.FC<NewItemProps> = ( { save, error } ) => {
         <>
         <NewItemContainer>
             <input type="text" onChange={ e => setNewName( e.target.value ) } />
-            $<input type="number" onChange={ e => setNewPrice( parseInt( e.target.value ) ) } />
+            $<input type="number" onChange={ e => setNewPrice( parseFloat( e.target.value ) ) } />
             <span className="save" onClick={ () => save( newName, newPrice ) }>
                 Save item
             </span>
